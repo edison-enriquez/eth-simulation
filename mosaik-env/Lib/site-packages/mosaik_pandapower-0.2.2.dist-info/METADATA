@@ -1,0 +1,126 @@
+Metadata-Version: 2.1
+Name: mosaik-pandapower
+Version: 0.2.2
+Summary: An adapter to use pandapower with mosaik.
+Home-page: https://gitlab.com/mosaik/components/energy/mosaik-pandapower
+Author: Rami Elshinawy
+Author-email: mosaik@offis.de
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Scientific/Engineering
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+License-File: AUTHORS.txt
+Requires-Dist: arrow (>=1.0)
+Requires-Dist: mosaik-api (>=2.0)
+Requires-Dist: pandapower
+Requires-Dist: matplotlib
+Requires-Dist: numba
+
+mosaik-pandapower
+=================
+
+This package contains an adapter to connect *pandapower* to *mosaik*.
+
+
+Input
+-----
+Grid import can be done from Json or Excel files, and the file
+should exist in the working directory of mosaik scenario::
+
+    sim_config = {
+       'Grid': {
+            'python': 'mosaik_pandapower.simulator:Pandapower'
+            }
+    }
+     
+    GRID_FILE = 'path to the file.json' or  'path to the file.xlsx'
+    gridsim = world.start('Grid', step_size=15*60)
+    grid = gridsim.Grid(gridfile=GRID_FILE).children
+    
+* In pandapower library there exist a list of standard grids that 
+  can be directly imported and simulated. An overview is given
+  in the `documentation`__
+
+__ https://pandapower.readthedocs.io/en/develop/networks.html
+ 
+  
+The following list of grid clusters that could be simulated by 
+this model are:
+
+* Simbench::
+
+          GRID_FILE = 'name of the simbench grid'
+
+To use Simbench grid, simbench has to be installed with 'pip install simbench'
+          
+* Cigre networks::
+
+          GRID_FILE = 'cigre_(voltage level: hv,mv,lv)'
+          
+* Cigre network with DER::
+
+          GRID_FILE = 'cigre_mv_all' or 'cigre_mv_pv_wind'
+          
+* Power system Cases :
+  these networks exist as Json files in
+  ~/pandapower/networks/power_system_test_case_jsons
+
+  these files should be copied in the working directory and 
+  imported as json file
+          
+          
+Examples
+--------
+
+Examples of the mosaik-pandapower adapter can be found in a seperated `repository`__.
+
+__ https://gitlab.com/mosaik/examples/mosaik-pandapower-examples
+
+
+Changelog
+=========
+
+0.2.2 - 2023-01-10
+------------------
+
+- Fix indexing for grids with non-sequential element indices
+
+0.2.1 - 2022-07-13
+------------------
+
+- Fix activation of connected loads and generators in setup_done
+
+0.2.0 - 2022-02-28
+------------------
+
+- Added storage attribute
+- Adapted handling of input values for in_service and controllable
+- Fix load cigre network via gridfile
+
+0.1.0 - 2021-08-31
+------------------
+
+- Initial release of mosaik-pandapower adapter
+
+
+Authors
+=======
+
+The author of the mosaik-pandapower adapter is Rami Elshinawy.
+
+Additional contributors: Annika Ofenloch, Fernando Penaherrera, Jan Sören Schwarz,
+Eike Schulte
+
+

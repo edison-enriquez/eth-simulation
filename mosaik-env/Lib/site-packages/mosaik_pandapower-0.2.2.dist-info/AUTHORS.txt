@@ -1,0 +1,7 @@
+Authors
+=======
+
+The author of the mosaik-pandapower adapter is Rami Elshinawy.
+
+Additional contributors: Annika Ofenloch, Fernando Penaherrera, Jan Sören Schwarz,
+Eike Schulte

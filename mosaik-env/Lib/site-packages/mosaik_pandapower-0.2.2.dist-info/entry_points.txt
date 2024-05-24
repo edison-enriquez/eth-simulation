@@ -1,0 +1,3 @@
+[console_scripts]
+mosaik-pandapower = mosaik_pandapower.simulator:main
+
