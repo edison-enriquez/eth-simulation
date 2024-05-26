@@ -43,7 +43,7 @@ git lfs install
 # cd /ruta/al/repositorio
 
 # Agrega todos los cambios al área de staging
-git add .
+git add -A
 
 # Crea un commit con el mensaje proporcionado
 git commit -m "$commit_message"
