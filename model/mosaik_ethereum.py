@@ -1,4 +1,4 @@
-import mosaik_api
+import mosaik_api_v3
 from mosaik_api import Simulator
 from example_sim import simulator
 from networkx.drawing.tests.test_pylab import plt
@@ -21,7 +21,7 @@ meta = {
 }
 
 
-class Ethereum(mosaik_api.Simulator):
+class Ethereum(mosaik_api_v3.Simulator):
     def __init__(self):
         super().__init__(meta)
         # self.simulator = Simulator
@@ -188,7 +188,7 @@ class Ethereum(mosaik_api.Simulator):
 
 
 def main():
-    return mosaik_api.start_simulation(Ethereum(), 'mosaik-ethereum simulator')
+    return mosaik_api_v3.start_simulation(Ethereum(), 'mosaik-ethereum simulator')
 
 
 if __name__ == '__main__':

@@ -85,78 +85,6 @@ def create_scenario(world):
     connect_many_to_one(world, branches, hdf5,
                         'P_from', 'Q_from', 'P_to', 'P_from')
 
-    # Web visualization
-    webvis = world.start('WebVis', start_date=START, step_size=60)
-    webvis.set_config(ignore_types=['Topology', 'ResidentialLoads', 'Grid',
-                                    'Database'])
-    vis_topo = webvis.Topology()
-
-    connect_many_to_one(world, nodes, vis_topo, 'P', 'Vm')
-    webvis.set_etypes({
-        'RefBus': {
-            'cls': 'refbus',
-            'attr': 'P',
-            'unit': 'P [W]',
-            'default': 0,
-            'min': 0,
-            'max': 30000,
-        },
-        'PQBus': {
-            'cls': 'pqbus',
-            'attr': 'Vm',
-            'unit': 'U [V]',
-            'default': 230,
-            'min': 0.99 * 230,
-            'max': 1.01 * 230,
-        },
-    })
-
-    connect_many_to_one(world, houses, vis_topo, 'P_out')
-    webvis.set_etypes({
-        'House': {
-            'cls': 'load',
-            'attr': 'P_out',
-            'unit': 'P [W]',
-            'default': 0,
-            'min': 0,
-            'max': 3000,
-        },
-    })
-    connect_many_to_one(world, ethereum, vis_topo, 'load')
-    webvis.set_etypes({
-        'Ethereum': {
-            'cls': 'load',
-            'attr': 'load',
-            'unit': 'P [W]',
-            'default': 0,
-            'min': 0,
-            'max': 3000,
-        },
-    })
-    connect_many_to_one(world, ethereum, vis_topo, 'gene')
-    webvis.set_etypes({
-        'Ethereum': {
-            'cls': 'gen',
-            'attr': 'gene',
-            'unit': 'P [W]',
-            'default': 0,
-            'min': 0,
-            'max': 3000,
-        },
-    })
-
-    connect_many_to_one(world, pvs, vis_topo, 'P')
-    webvis.set_etypes({
-        'PV': {
-            'cls': 'gen',
-            'attr': 'P',
-            'unit': 'P [W]',
-            'default': 0,
-            'min': -10000,
-            'max': 0,
-        },
-    })
-
 
 def connect_buildings_to_grid(world, houses, pvs, ethereum, grid):
     # Get all bus with PQBus in a dictionnary {id: bus element}
@@ -175,13 +103,13 @@ def connect_buildings_to_grid(world, houses, pvs, ethereum, grid):
         if index < len(pvs):
             world.connect(pvs[index], buses[node_id], 'P')
 
-        # # Assign a house load to the node
-        # world.connect(house, buses[node_id], ('P_out', 'P'))
-        # if (index in range(10, 20)) and index < len(pvs):
-        #     world.connect(house, ethereum[index - 10], ('P_out', 'load'))
-        #     world.connect(pvs[index], ethereum[index - 10], ('P', 'gene'))
-        # elif (index in range(10, 20)):
-        #     world.connect(house, ethereum[index - 10], ('P_out', 'load'))
+        # Assign a house load to the node
+        world.connect(house, buses[node_id], ('P_out', 'P'))
+        if (index in range(10, 20)) and index < len(pvs):
+            world.connect(house, ethereum[index - 10], ('P_out', 'load'))
+            world.connect(pvs[index], ethereum[index - 10], ('P', 'gene'))
+        elif (index in range(10, 20)):
+            world.connect(house, ethereum[index - 10], ('P_out', 'load'))
 
         # Connect Ethereum database to a node with PV and house load
         if BLOCKCHAIN:
