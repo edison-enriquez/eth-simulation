@@ -8,7 +8,7 @@ function show_usage() {
 
 # Valores por defecto
 branch_name="main"
-commit_message=""
+commit_message="Actualizando carpeta eth_forge"
 
 # Parsear los argumentos
 while getopts ":b:c:" opt; do
@@ -31,31 +31,14 @@ while getopts ":b:c:" opt; do
 done
 shift $((OPTIND -1))
 
-# Verifica si se proporcionó un mensaje de commit
-if [ -z "$commit_message" ]; then
-  show_usage
-fi
-
 # Inicializa Git LFS si no se ha hecho antes
 git lfs install
 
-# Navega al directorio del repositorio (opcional)
-# cd /ruta/al/repositorio
-
-# Agrega todos los cambios al área de staging
-git add -A
+# Agregar la carpeta eth_forge al área de staging
+git add eth_forge/
 
 # Crea un commit con el mensaje proporcionado
 git commit -m "$commit_message"
-
-# Extrae los cambios más recientes del repositorio remoto
-git pull origin "$branch_name"
-
-# Verifica si hubo conflictos durante el pull
-if [ $? -ne 0 ]; then
-  echo "Hubo conflictos durante el pull. Resuélvelos y luego ejecuta 'git push'."
-  exit 1
-fi
 
 # Empuja los cambios al repositorio remoto
 git push origin "$branch_name"
