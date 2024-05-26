@@ -36,6 +36,9 @@ if [ -z "$commit_message" ]; then
   show_usage
 fi
 
+# Inicializa Git LFS si no se ha hecho antes
+git lfs install
+
 # Navega al directorio del repositorio (opcional)
 # cd /ruta/al/repositorio
 
