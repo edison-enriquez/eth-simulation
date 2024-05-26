@@ -1,14 +1,40 @@
 #!/bin/bash
 
-# Verifica si se proporcionó un mensaje de commit y una rama
-if [ -z "$1" ] || [ -z "$2" ]; then
-  echo "Uso: $0 'mensaje del commit' 'nombre de la rama'"
+# Función para mostrar el uso del script
+function show_usage() {
+  echo "Uso: $0 [-b nombre_de_la_rama] [-c 'mensaje del commit']"
   exit 1
-fi
+}
 
-# Almacena el mensaje del commit y el nombre de la rama
-commit_message="$1"
-branch_name="$2"
+# Valores por defecto
+branch_name="main"
+commit_message=""
+
+# Parsear los argumentos
+while getopts ":b:c:" opt; do
+  case $opt in
+    b)
+      branch_name=$OPTARG
+      ;;
+    c)
+      commit_message=$OPTARG
+      ;;
+    \?)
+      echo "Opción inválida: -$OPTARG" >&2
+      show_usage
+      ;;
+    :)
+      echo "La opción -$OPTARG requiere un argumento." >&2
+      show_usage
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+# Verifica si se proporcionó un mensaje de commit
+if [ -z "$commit_message" ]; then
+  show_usage
+fi
 
 # Navega al directorio del repositorio (opcional)
 # cd /ruta/al/repositorio
